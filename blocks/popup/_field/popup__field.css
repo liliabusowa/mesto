@@ -1,4 +1,4 @@
-.popup__set-fields_field {
+.popup__field {
     border: none;
     font-style: normal;
     font-weight: normal;
@@ -10,6 +10,6 @@
     padding: 0 0 13px 0;
 }
 
-.popup__set-fields_field:nth-child(2n) {
+.popup__field:nth-child(2n) {
     margin-top: 30px;
 }
