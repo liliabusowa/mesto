@@ -24,48 +24,16 @@
                 <button type="button" class="profile__button"></button>
             </section>
             <section class="elements">
+<!--
                 <article class="element">
+                    <button type="button" class="element__trash"></button>
                     <img class="element__photo" src="./images/karachaevsk.png" alt="Карачаевск">
                     <div class="element__description">
                         <h2 class="element__mesto">Карачаевск</h2>
                         <button type="button" class="element__like element__like_active"></button>
                     </div>
                 </article>
-                <div class="element">
-                    <img class="element__photo" src="./images/elbrus.png" alt="Эльбрус">
-                    <div class="element__description">
-                        <h2 class="element__mesto">Гора Эльбрус</h2>
-                        <button type="submit" class="element__like element__like_active"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img class="element__photo" src="./images/dombai.png" alt="Домбай">
-                    <div class="element__description">
-                        <h2 class="element__mesto">Домбай</h2>
-                        <button type="submit" class="element__like element__like_active"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img class="element__photo" src="./images/elbrus.png" alt="Эльбрус">
-                    <div class="element__description">
-                        <h2 class="element__mesto">Гора Эльбрус</h2>
-                        <button type="submit" class="element__like element__like_active"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img class="element__photo" src="./images/dombai.png" alt="Домбай">
-                    <div class="element__description">
-                        <h2 class="element__mesto">Домбай</h2>
-                        <button type="submit" class="element__like element__like_active"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img class="element__photo" src="./images/karachaevsk.png" alt="Карачаевск">
-                    <div class="element__description">
-                        <h2 class="element__mesto">Карачаево-Черкесск</h2>
-                        <button type="submit" class="element__like element__like_active"></button>
-                    </div>
-                </div>
+-->            
             </section>
             <div class="popup popup_closed">
                 <div class="popup__window">
@@ -80,6 +48,21 @@
                     </form>  
                 </div>
             </div>
+
+            <div class="popup popup_closed">
+                <div class="popup__window">
+                    <button type="button" class="popup__close-button"></button>
+                    <form class="popup__container" name="form">
+                        <h2 class="popup__title">Новое место</h2>
+                        <fieldset class="popup__set-fields">
+                            <input type="text" value="Название" name="name" class="popup__field popup__field_type_name">
+                            <input type="text" value="Ссылка на картинку" name="description" class="popup__field popup__field_type_description">
+                        </fieldset>
+                        <button type="submit" class="popup__save-button">Создать</button>
+                    </form>  
+                </div>
+            </div>
+
         </main>
         <footer class="footer">
             <p class="footer__author">&#169; 2020 Mesto Russia</p>
