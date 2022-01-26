@@ -89,6 +89,17 @@ const createTaskDomNode = (item) => {
     taskTemplate.remove();
   });
 
+  
+  const likeButton = taskTemplate.querySelector('.element__like');
+  
+  function clickLike() {
+    if (likeButton.classList.contains('element__like_active') == false)
+      likeButton.classList.add('element__like_active');
+    else
+      likeButton.classList.remove('element__like_active');
+  }
+  likeButton.addEventListener('click', clickLike)
+  
   return taskTemplate;
 }
 
@@ -115,3 +126,4 @@ const submitFormHendler = (evt) => {
 formElementPicture.addEventListener('submit', submitFormHendler);  
 
 list.append(...result);
+

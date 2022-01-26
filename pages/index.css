@@ -27,5 +27,6 @@
 @import url(../blocks/element/__description/element__description.css);
 @import url(../blocks/element/__mesto/element__mesto.css);
 @import url(../blocks/element/__like/element__like.css);
+@import url(../blocks/element/__like/_active/element__like_active.css);
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__author/footer__author.css);
