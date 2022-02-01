@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesto</title>
-    <link rel="icon" href="./images/favicon_mesto48px.ico" />
-    <link rel="stylesheet" href="./pages/index.css" />
+    <link rel="icon" href="./images/favicon_mesto48px.ico">
+    <link rel="stylesheet" href="./pages/index.css">
   </head>
+
   <body class="page">
     <header class="header">
-      <img
-        class="header__logo"
-        src="./images/headerlogo.svg"
-        alt="Логотип сайта"
-      />
+      <img class="header__logo" src="./images/headerlogo.svg" alt="Логотип сайта">
     </header>
+
     <main>
       <section class="profile page__section">
-        <img
-          class="profile__avatar"
-          src="./images/cousteau.jpg"
-          alt="Фотография-аватар автора снимков"
-        />
+        <img class="profile__avatar" src="./images/cousteau.jpg" alt="Фотография-аватар автора снимков">
         <div class="profile__info">
           <div class="profile__name-container">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -32,71 +26,48 @@
         </div>
         <button type="button" class="profile__add-button buttons"></button>
       </section>
-      <section
-        class="gallery page__section"
-        aria-label="Секция с карточками мест"
-      >
+
+      <section class="gallery page__section" aria-label="Секция с карточками мест">
         <ul class="gallery__list"></ul>
       </section>
     </main>
+
     <footer class="footer page__section">
       <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
     </footer>
+
     <div class="popup popup_type_profile">
       <div class="popup__container">
         <h2 class="popup__title">Редактировать профиль</h2>
         <button type="button" class="popup__close-button buttons"></button>
         <form class="popup__form" name="profile">
-          <input
-            type="text"
-            name="username"
-            class="popup__input popup__input_type_name"
-            required
-          />
-          <input
-            type="text"
-            name="userjob"
-            class="popup__input popup__input_type_job"
-            required
-          />
+          <input type="text" name="username" class="popup__input popup__input_type_name" required>
+          <input type="text" name="userjob" class="popup__input popup__input_type_job" required>
           <button type="submit" class="popup__save-button">Сохранить</button>
         </form>
       </div>
     </div>
+
     <div class="popup popup_type_card">
       <div class="popup__container">
         <h2 class="popup__title">Новое место</h2>
         <button type="button" class="popup__close-button buttons"></button>
         <form class="popup__form" name="card">
-          <input
-            type="text"
-            name="placename"
-            class="popup__input popup__input_type_placename"
-            placeholder="Название"
-            required
-          />
-          <input
-            type="url"
-            name="imagelink"
-            class="popup__input popup__input_type_imagelink"
-            placeholder="Ссылка на картинку"
-            required
-          />
+          <input type="text" name="placename" class="popup__input popup__input_type_placename" placeholder="Название" required>
+          <input type="url" name="imagelink" class="popup__input popup__input_type_imagelink" placeholder="Ссылка на картинку" required>
           <button type="submit" class="popup__save-button">Создать</button>
         </form>
       </div>
     </div>
+
     <div class="popup popup_type_image">
       <figure class="popup__container popup__container_type_image">
         <button type="button" class="popup__close-button buttons"></button>
-        <img
-          class="popup__image"
-          src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg"
-          alt="Фотография места"
-        />
+        <img class="popup__image" src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="Фотография места">
         <figcaption class="popup__caption"></figcaption>
       </figure>
     </div>
+
     <template class="card-template">
       <li class="card">
         <h2 class="card__name"></h2>
@@ -107,6 +78,7 @@
         <button type="button" class="card__delete"></button>
       </li>
     </template>
+
     <script src="./scripts/cards.js"></script>
     <script src="./scripts/index.js"></script>
   </body>

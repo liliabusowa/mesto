@@ -1,9 +1,6 @@
-// ----------ПЕРЕМЕННЫЕ----------
-
 // Объекты профиля пользователя
 const profileName = document.querySelector(".profile__name");
 const profileJob = document.querySelector(".profile__job");
-
 // Объекты попапа редактирования профиля пользователя
 const profilePopup = document.querySelector(".popup_type_profile");
 const profilePopupOpenBtn = document.querySelector(".profile__edit-button");
@@ -11,7 +8,6 @@ const profilePopupCloseBtn = profilePopup.querySelector(".popup__close-button");
 const profilePopupForm = profilePopup.querySelector(".popup__form");
 const userNameInput = profilePopup.querySelector(".popup__input_type_name");
 const userJobInput = profilePopup.querySelector(".popup__input_type_job");
-
 // Объекты попапа добавления новой карточки в галерею
 const cardPopup = document.querySelector(".popup_type_card");
 const cardPopupOpenBtn = document.querySelector(".profile__add-button");
@@ -19,22 +15,21 @@ const cardPopupCloseBtn = cardPopup.querySelector(".popup__close-button");
 const cardPopupForm = cardPopup.querySelector(".popup__form");
 const placeNameInput = cardPopup.querySelector(".popup__input_type_placename");
 const imageLinkInput = cardPopup.querySelector(".popup__input_type_imagelink");
-
 // Галерея (контейнер для добавления карточек)
 const gallery = document.querySelector(".gallery__list");
-
 // Объекты попапа просмотра фотографии
 const photoPopup = document.querySelector(".popup_type_image");
 const photoPopupCloseBtn = photoPopup.querySelector(".popup__close-button");
 const photoPopupImage = photoPopup.querySelector(".popup__image");
 const photoPopupCaption = photoPopup.querySelector(".popup__caption");
-
 // Шаблон карточки
 const cardTemplate = document.querySelector(".card-template");
 
-// ----------ФУНКЦИИ----------
 
-// Создание карточки (подготовка разметки, установка слушателей)
+
+
+
+// Создание карточки
 function createCard(initialCard) {
   const newCard = cardTemplate.content.cloneNode(true);
   const newCardName = newCard.querySelector(".card__name");
@@ -114,7 +109,8 @@ function deleteCard(evt) {
   deletedCard.remove();
 }
 
-// ----------ДЕЙСТВИЯ----------
+
+
 
 // Заполняем галерею карточками при загрузке страницы
 initialCards.forEach(createAndAddCardToGallery);
