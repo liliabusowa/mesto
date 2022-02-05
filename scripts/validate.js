@@ -1,6 +1,3 @@
-// включение валидации вызовом enableValidation
-// все настройки передаются при вызове
-
 const enableValidation = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -12,29 +9,17 @@ const enableValidation = {
 
 function validation(data) {
     const forms = [...document.querySelectorAll(data.formSelector)]
-
     forms.forEach(form => addFormListering(form, data))
 }
-
-
-
 function addFormListering(form, config) {
     console.log(form, config)
-
     form.addEventListener('submit', handlerSubmit)//vizov otmeni otpravki formi
     form.addEventListener('input', () => setSubmitButtonState(form, config))
-
     const inputs = [...form.querySelectorAll(config.inputSelector)]
-
     inputs.forEach(input => input.addEventListener('input', () => handleField(form, input, config)))
-
     setSubmitButtonState(form, config)
-    
 }
 
-
-
-//otmena otpravki form
 function handlerSubmit(evt) {
     evt.preventDefault()
 }
@@ -61,17 +46,11 @@ function hideError(form, input, config) {
     errorElement.textContent = '';
 }
 
-
-
 function setSubmitButtonState(form, config) {
-    const buttons = [...form.querySelectorAll(config.submitButtonSelector)]
-    
+    const buttons = [...form.querySelectorAll(config.submitButtonSelector)]   
     buttons.forEach(button => {
         button.disabled = !form.checkValidity()
         button.classList.toggle(config.inactiveButtonClass, !form.checkValidity())
     })
-
 }
 validation(enableValidation)
-
-//pochemy posle otpravki formi mozhno otpravit' pystyu formy? v kakoi moment ona dolzhna ochisatsya?

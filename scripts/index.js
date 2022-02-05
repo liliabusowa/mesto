@@ -26,9 +26,6 @@ const photoPopupCaption = photoPopup.querySelector(".popup__caption");
 const cardTemplate = document.querySelector(".card-template");
 
 
-
-
-
 // Создание карточки
 function createCard(initialCard) {
   const newCard = cardTemplate.content.cloneNode(true);
@@ -109,8 +106,25 @@ function deleteCard(evt) {
   deletedCard.remove();
 }
 
+function clickOverlay(evt) {
+  if (evt.target === cardPopup) {
+    closePopup(cardPopup);
+  }
+  if (evt.target === profilePopup) {
+    closePopup(profilePopup);
+  }
+  if (evt.target === photoPopup) {
+    closePopup(photoPopup);
+  }
+}
 
-
+function clickEsc(evt) {
+  if (evt.code === 'Escape') {
+    closePopup(cardPopup);
+    closePopup(profilePopup);
+    closePopup(photoPopup);
+  }
+}
 
 // Заполняем галерею карточками при загрузке страницы
 initialCards.forEach(createAndAddCardToGallery);
@@ -128,3 +142,6 @@ cardPopupForm.addEventListener("submit", addCardSubmitHandler);
 // Отслеживаем закрытие попапа просмотра фотографии (отслеживание открытия
 // попапа устанавливается в функциях создания карточки)
 photoPopupCloseBtn.addEventListener("click", () => closePopup(photoPopup));
+
+document.addEventListener('click', clickOverlay) 
+document.addEventListener('keydown', clickEsc)
