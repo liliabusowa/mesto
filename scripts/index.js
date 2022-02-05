@@ -37,7 +37,7 @@ function createCard(initialCard) {
   newCardPhoto.setAttribute("src", initialCard.link);
   newCardPhoto.setAttribute("alt", initialCard.description);
   newCardPhoto.addEventListener("click", openPhoto);
-  newCardLike.addEventListener("click", likeToggle);
+  newCardLike.addEventListener("click", toggleLike);
   newCardDeleteBtn.addEventListener("click", deleteCard);
   return newCard;
 }
@@ -70,10 +70,14 @@ function addCardSubmitHandler(evt) {
 // Открытие попапа
 function openPopup(popupType) {
   popupType.classList.add("popup_opened");
+  popupType.addEventListener('click', clickOverlay) 
+  document.addEventListener('keydown', clickEsc)
 }
 // Закрытие попапа
 function closePopup(popupType) {
   popupType.classList.remove("popup_opened");
+  popupType.removeEventListener('click', clickOverlay) 
+  document.removeEventListener('keydown', clickEsc)
 }
 // Открытие попапа редактирования профиля пользователя
 function openProfilePopup() {
@@ -97,7 +101,7 @@ function openPhoto(evt) {
   openPopup(photoPopup);
 }
 // Переключение лайка в карточке
-function likeToggle(evt) {
+function toggleLike(evt) {
   evt.currentTarget.classList.toggle("card__like_active");
 }
 // Удаление карточки
@@ -107,22 +111,16 @@ function deleteCard(evt) {
 }
 
 function clickOverlay(evt) {
-  if (evt.target === cardPopup) {
-    closePopup(cardPopup);
-  }
-  if (evt.target === profilePopup) {
-    closePopup(profilePopup);
-  }
-  if (evt.target === photoPopup) {
-    closePopup(photoPopup);
+  const popupOpen = document.querySelector('.popup_opened')
+  if (evt.target) {
+    closePopup(popupOpen);
   }
 }
 
 function clickEsc(evt) {
+  const popupOpen = document.querySelector('.popup_opened')
   if (evt.code === 'Escape') {
-    closePopup(cardPopup);
-    closePopup(profilePopup);
-    closePopup(photoPopup);
+    closePopup(popupOpen);
   }
 }
 
@@ -143,5 +141,7 @@ cardPopupForm.addEventListener("submit", addCardSubmitHandler);
 // попапа устанавливается в функциях создания карточки)
 photoPopupCloseBtn.addEventListener("click", () => closePopup(photoPopup));
 
+/*
 document.addEventListener('click', clickOverlay) 
 document.addEventListener('keydown', clickEsc)
+*/

@@ -1,4 +1,4 @@
-const enableValidation = {
+const formsValidationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__save-button',
@@ -7,20 +7,19 @@ const enableValidation = {
     errorClass: 'popup__error_visible'
 };
 
-function validation(data) {
+function enableValidation(data) {
     const forms = [...document.querySelectorAll(data.formSelector)]
-    forms.forEach(form => addFormListering(form, data))
+    forms.forEach(form => addFormListener(form, data))
 }
-function addFormListering(form, config) {
-    console.log(form, config)
-    form.addEventListener('submit', handlerSubmit)//vizov otmeni otpravki formi
+function addFormListener(form, config) {
+    form.addEventListener('submit', handleSubmit)//vizov otmeni otpravki formi
     form.addEventListener('input', () => setSubmitButtonState(form, config))
     const inputs = [...form.querySelectorAll(config.inputSelector)]
     inputs.forEach(input => input.addEventListener('input', () => handleField(form, input, config)))
     setSubmitButtonState(form, config)
 }
 
-function handlerSubmit(evt) {
+function handleSubmit(evt) {
     evt.preventDefault()
 }
 
@@ -53,4 +52,4 @@ function setSubmitButtonState(form, config) {
         button.classList.toggle(config.inactiveButtonClass, !form.checkValidity())
     })
 }
-validation(enableValidation)
+enableValidation(formsValidationConfig)
