@@ -73,18 +73,20 @@ function openPopup(popupType) {
   popupType.addEventListener('click', clickOverlay) 
   document.addEventListener('keydown', clickEsc)
 }
+
 // Закрытие попапа
 function closePopup(popupType) {
   popupType.classList.remove("popup_opened");
-  popupType.removeEventListener('click', clickOverlay) 
   document.removeEventListener('keydown', clickEsc)
 }
+
 // Открытие попапа редактирования профиля пользователя
 function openProfilePopup() {
   userNameInput.value = document.querySelector(".profile__name").textContent;
   userJobInput.value = document.querySelector(".profile__job").textContent;
   openPopup(profilePopup);
 }
+
 // Добавление нового профиля пользователя (перезапись полей профиля и закрытие попапа)
 function saveProfileSubmitHandler(evt) {
   evt.preventDefault();
@@ -92,6 +94,7 @@ function saveProfileSubmitHandler(evt) {
   profileJob.textContent = userJobInput.value;
   closePopup(profilePopup);
 }
+
 // Открытие фотографии для просмотра
 function openPhoto(evt) {
   photoPopupImage.src = evt.currentTarget.src;
@@ -100,10 +103,12 @@ function openPhoto(evt) {
     evt.currentTarget.parentElement.previousElementSibling.textContent;
   openPopup(photoPopup);
 }
+
 // Переключение лайка в карточке
 function toggleLike(evt) {
   evt.currentTarget.classList.toggle("card__like_active");
 }
+
 // Удаление карточки
 function deleteCard(evt) {
   const deletedCard = evt.currentTarget.closest(".card");
@@ -111,8 +116,8 @@ function deleteCard(evt) {
 }
 
 function clickOverlay(evt) {
-  const popupOpen = document.querySelector('.popup_opened')
-  if (evt.target) {
+  if (evt.target.classList.contains('popup_opened')) {
+    const popupOpen = document.querySelector('.popup_opened')
     closePopup(popupOpen);
   }
 }
@@ -140,8 +145,3 @@ cardPopupForm.addEventListener("submit", addCardSubmitHandler);
 // Отслеживаем закрытие попапа просмотра фотографии (отслеживание открытия
 // попапа устанавливается в функциях создания карточки)
 photoPopupCloseBtn.addEventListener("click", () => closePopup(photoPopup));
-
-/*
-document.addEventListener('click', clickOverlay) 
-document.addEventListener('keydown', clickEsc)
-*/
