@@ -5,7 +5,8 @@ import initialCards from './data.js';
 // Класс карточек
 import Card from './Card.js';
 // Класс валидаторов форм ввода данных и объект его настроек
-import { FormValidator, validationConfig } from './FormValidator.js';
+import { FormValidator } from './FormValidator.js';
+import { validationConfig } from './data.js';
 
 // ----------ЭКСПОРТЫ----------
 
@@ -143,10 +144,7 @@ cardPopupForm.addEventListener('submit', addCardSubmitHandler);
 // Отслеживаем закрытие всех попапов (по клику на оверлей, по клику на крестик)
 popups.forEach(popup => {
   popup.addEventListener('mousedown', evt => {
-    if (evt.target.classList.contains('popup_opened')) {
-      closePopup(popup);
-    }
-    if (evt.target.classList.contains('popup__close-button')) {
+    if ((evt.target.classList.contains('popup_opened')) || (evt.target.classList.contains('popup__close-button'))) {
       closePopup(popup);
     }
   });

@@ -1,13 +1,3 @@
-// Объект настроек с селекторами и классами элементов, используемых при валидации
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__save-button',
-  invalidInputClass: 'popup__input_state_invalid',
-  errorClass: 'popup__input-error_active',
-  submitButtonClass: 'popup__save-button_inactive',
-};
-
 // Класс "Валидатор формы"
 class FormValidator {
   constructor(validationConfig, formElement) {
@@ -84,4 +74,4 @@ class FormValidator {
   }
 }
 
-export { FormValidator, validationConfig };
+export { FormValidator };
