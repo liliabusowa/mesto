@@ -1,12 +1,11 @@
-import { openPhoto } from './index.js';
-
 // Класс карточек
 export default class Card {
-  constructor(data, cardSelector) {
+  constructor({ data, handleCardClick }, cardSelector) {
     this._name = data.name;
     this._link = data.link;
     this._description = `Фотография места. ${data.name}`;
     this._cardSelector = cardSelector;
+    this._handleCardClick = handleCardClick;
   }
   // Получение шаблона разметки для новой карточки
   _getTemplate() {
@@ -38,7 +37,7 @@ export default class Card {
       this._deleteCard();
     });
     this._cardPhotoElement.addEventListener('click', () => {
-      openPhoto(this._name, this._link, this._description);
+      this._handleCardClick(this._name, this._link, this._description);
     });
   }
   // Переключение лайка в карточке
@@ -48,6 +47,5 @@ export default class Card {
   // Удаление карточки
   _deleteCard() {
     this._cardElement.remove();
-    this._element = null;
   }
 }

@@ -1,3 +1,5 @@
+import { validationConfig } from '../utils/constants.js';
+
 // Класс "Валидатор формы"
 class FormValidator {
   constructor(validationConfig, formElement) {
@@ -74,4 +76,4 @@ class FormValidator {
   }
 }
 
-export { FormValidator };
+export { FormValidator, validationConfig };
