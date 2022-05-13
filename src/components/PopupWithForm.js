@@ -3,14 +3,15 @@ import Popup from './Popup.js';
 export default class PopupWithForm extends Popup {
   constructor({ popupSelector, formSubmitHandler }) {
     super(popupSelector);
-    this._formSubmitHandler = formSubmitHandler;
-    this._formElement = this._popupElement.querySelector('.popup__form');
-    this._inputElements = Array.from(this._formElement.querySelectorAll('input'));
+    this._formSubmitHandler = formSubmitHandler;   ///handleformsubnit
+    this._formElement = this._popupElement.querySelector('.popup__form'); ///formpopup
+    this._inputElements = Array.from(this._formElement.querySelectorAll('input')); ///inputlist
     this._bindedHandleFormSubmit = this._handleFormSubmit.bind(this);
-  }
-  setInputValues({ userName, userDescription }) {
     this._userNameInputElement = this._formElement.querySelector('.popup__input_type_name');
     this._userDescriptionInputElement = this._formElement.querySelector('.popup__input_type_job');
+  }
+
+  setInputValues({ userName, userDescription }) {
     this._userNameInputElement.value = userName;
     this._userDescriptionInputElement.value = userDescription;
   }
@@ -21,6 +22,8 @@ export default class PopupWithForm extends Popup {
     });
     return inputValues;
   }
+
+  
   _handleFormSubmit(evt) {
     evt.preventDefault;
     const inputValues = this._getInputValues();
@@ -32,7 +35,6 @@ export default class PopupWithForm extends Popup {
   }
   close() {
     super.close();
-    this._popupElement.removeEventListener('submit', this._bindedHandleFormSubmit);
     this._formElement.reset();
   }
 }

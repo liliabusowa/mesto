@@ -40,25 +40,30 @@ const cardFormElement = document.querySelector('.popup_type_card').querySelector
 
 // ----------ДЕЙСТВИЯ----------
 
+function createCard(data) {
+  const card = new Card(
+    {
+      data,
+      handleCardClick: (photoCaption, photoLink, photoDescription) => {
+        popupWithImage.setEventListeners();
+        popupWithImage.open(photoCaption, photoLink, photoDescription);
+      },
+    },
+    cardTemplateSelector
+  );
+  const cardElement = card.generateCard();
+  return cardElement;
+}
+
 // Создаем экземпляр класса отрисовщика для первоначального заполнения галереи карточками
 const cardSection = new Section(
-  {
+  { 
     initialCards,
     // передаем метод отрисовки отдельной карточки
-    renderer: data => {
-      const card = new Card(
-        {
-          data,
-          handleCardClick: (photoCaption, photoLink, photoDescription) => {
-            popupWithImage.setEventListeners();
-            popupWithImage.open(photoCaption, photoLink, photoDescription);
-          },
-        },
-        cardTemplateSelector
-      );
-      const cardElement = card.generateCard();
-      return cardElement;
-    },
+    renderer: data => { 
+      const cardElement = createCard(data);
+      cardSection.addItem(cardElement);
+     },
   },
   cardsContainerSelector
 );
