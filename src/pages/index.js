@@ -45,7 +45,6 @@ function createCard(data) {
     {
       data,
       handleCardClick: (photoCaption, photoLink, photoDescription) => {
-        popupWithImage.setEventListeners();
         popupWithImage.open(photoCaption, photoLink, photoDescription);
       },
     },
@@ -65,6 +64,7 @@ const cardSection = new Section(
       cardSection.addItem(cardElement);
      },
   },
+
   cardsContainerSelector
 );
 
@@ -93,6 +93,7 @@ const popupWithProfileForm = new PopupWithForm({
 
 // Создаем экземпляр класса для попапа просмотра фотографии
 const popupWithImage = new PopupWithImage(pfotoPopupSelector);
+popupWithImage.setEventListeners();
 
 // Создаём экземпляр класса с данными о пользователе
 const userInfo = new UserInfo(userNameElementSelector, userDescriptionSelector);
@@ -108,10 +109,12 @@ profileOpenBtn.addEventListener('click', () => {
   profileFormValidator.resetValidation();
   popupWithProfileForm.setInputValues(userInfo.getUserInfo()); // передаем поля профиля в инпуты формы
   popupWithProfileForm.open();
+  popupWithProfileForm.setEventListeners();///
 });
 
 // Отслеживаем открытие попапа добавления новой карточки
 cardPopupOpenBtn.addEventListener('click', () => {
   cardFormValidator.resetValidation();
   popupWithCardForm.open();
+  popupWithCardForm.setEventListeners();///
 });
