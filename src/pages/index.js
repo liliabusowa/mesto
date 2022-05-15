@@ -76,8 +76,7 @@ const popupWithCardForm = new PopupWithForm({
   popupSelector: cardPopupSelector,
   // передаем обработчик события отправки формы создания карточки
   formSubmitHandler: inputValues => {
-    cardSection._items = [inputValues];
-    cardSection.renderItems();
+    cardSection.addItem(createCard(inputValues));
     popupWithCardForm.close();
   },
 });
