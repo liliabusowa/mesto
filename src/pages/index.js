@@ -2,6 +2,7 @@
 
 // Файл стилей
 import './index.css';
+
 // Исходный массив с данными карточек
 import {
   initialCards,
