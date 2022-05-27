@@ -7,8 +7,8 @@ export default class Popup {
     this._saveBtnElement = this._popupElement.querySelector('.popup__save-button');
   }
   open() {
-    this.setEventListeners();
     this._popupElement.classList.add('popup_opened');
+    document.addEventListener('keydown', this._bindedHandleEscClose);
   }
   close() {
     this._popupElement.classList.remove('popup_opened');
@@ -28,7 +28,6 @@ export default class Popup {
     }
   }
   setEventListeners() {
-    document.addEventListener('keydown', this._bindedHandleEscClose);
     this._popupElement.addEventListener('mousedown', this._bindedHandleMouseClose);
   }
   // Замена надписи на кнопке

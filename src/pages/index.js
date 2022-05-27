@@ -40,6 +40,7 @@ const profileFormElement = document
   .querySelector('.popup_type_profile')
   .querySelector('.popup__form');
 
+
 // Попап аватара пользователя (кнопка открытия и форма ввода)
 const avatarEditBtn = document.querySelector('.profile__avatar-overlay');
 const avatarFormElement = document
@@ -69,7 +70,7 @@ api
     userInfo.updateUserData(userData);
     userInfo.setProfileFields();
     userInfo.setAvatar();
-
+    
     // ----------- Экземпляр попапа профиля -----------------
     const popupWithProfileForm = new PopupWithForm({
       popupSelector: profilePopupSelector,
@@ -91,6 +92,8 @@ api
           });
       },
     });
+    popupWithProfileForm.setEventListeners();
+
     // ------------- Открытие попапа профиля ----------------
     profileOpenBtn.addEventListener('click', () => {
       profileFormValidator.resetValidation();
@@ -118,6 +121,8 @@ api
           });
       },
     });
+    popupWithAvatarForm.setEventListeners();
+
     // ------------- Открытие попапа аватара ----------------
     avatarEditBtn.addEventListener('click', () => {
       avatarFormValidator.resetValidation();
@@ -180,7 +185,7 @@ api
               handleDelClick: card => {
                 // забираем в класс попапа подтверждения обработчик подтверждения
                 // и аргумент для него (card._id)
-                popupWithCardDelConfirm.getConfirmHandler({
+                popupWithCardDelConfirm.setConfirmHandler({
                   // обработчик подтверждения удаления
                   confirmHandler: cardId => {
                     popupWithCardDelConfirm.changeBtnText('Удаление...');
@@ -243,6 +248,8 @@ api
               });
           },
         });
+        popupWithCardForm.setEventListeners();
+
         // --------- Открытие попапа добавления карточки ------------
         cardPopupOpenBtn.addEventListener('click', () => {
           cardFormValidator.resetValidation();
@@ -261,9 +268,12 @@ api
 
 // --------- Экземпляр попапа просмотра фотографии --------------
 const popupWithImage = new PopupWithImage(pfotoPopupSelector);
+popupWithImage.setEventListeners();
+
 
 // --------- Экземпляр попапа потверждения удаления -------------
 const popupWithCardDelConfirm = new PopupWithConfirmation(confirmPopupSelector);
+popupWithCardDelConfirm.setEventListeners();
 
 // -------------- Экземпляры класса валидаторов -----------------
 const profileFormValidator = new FormValidator(validationConfig, profileFormElement);

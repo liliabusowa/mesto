@@ -11,7 +11,7 @@ export default class PopupWithConfirmation extends Popup {
     this._saveBtnElement.addEventListener('click', this._bindedHandleConfirm);
   }
   // Получение обработчика клика и его аргумента
-  getConfirmHandler({ confirmHandler, confirmHandlerArgument }) {
+  setConfirmHandler({ confirmHandler, confirmHandlerArgument }) {
     this._confirmHandler = confirmHandler;
     this._confirmHandlerArgument = confirmHandlerArgument;
   }
@@ -20,10 +20,5 @@ export default class PopupWithConfirmation extends Popup {
   // возоможности снять слушатель если попап закрыт без подтверждения
   _handleConfirm() {
     this._confirmHandler(this._confirmHandlerArgument);
-  }
-
-  close() {
-    super.close();
-    this._saveBtnElement.removeEventListener('click', this._bindedHandleConfirm);
   }
 }
