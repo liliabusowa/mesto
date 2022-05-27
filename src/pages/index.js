@@ -1,120 +1,275 @@
-// ----------ИМПОРТЫ----------
+// ================= ИМПОРТЫ =================
 
 // Файл стилей
 import './index.css';
-
-// Исходный массив с данными карточек
+// Константы
 import {
-  initialCards,
-  validationConfig,
-  cardsContainerSelector,
+  apiconfig,
   cardTemplateSelector,
-  cardPopupSelector,
+  cardsContainerSelector,
   profilePopupSelector,
+  avatarPopupSelector,
+  cardPopupSelector,
   pfotoPopupSelector,
-  userNameElementSelector,
+  confirmPopupSelector,
+  userNameSelector,
   userDescriptionSelector,
+  userAvatarImageSelector,
+  validationConfig,
 } from '../utils/constants.js';
+// Класс взаимодействия с сервором
+import Api from '../components/Api.js';
 // Класс карточек
 import Card from '../components/Card.js';
 // Класс валидаторов форм ввода данных и объект его настроек
-import { FormValidator } from '../components/FormValidator.js';
+import FormValidator from '../components/FormValidator.js';
 // Класс отрисовщиков элементов на странице
 import Section from '../components/Section.js';
-// Класс попапов
+// Классs попапов
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 // Класс данных о пользователе
 import UserInfo from '../components/UserInfo.js';
 
-// ----------ВЫБОР ЭЛЕМЕНТОВ DOM----------
+// ================= ВЫБОР ЭЛЕМЕНТОВ DOM =================
 
-// Элементы попапа редактирования профиля пользователя
+// Попап профиля пользователя (кнопка открытия и форма ввода)
 const profileOpenBtn = document.querySelector('.profile__edit-button');
 const profileFormElement = document
   .querySelector('.popup_type_profile')
   .querySelector('.popup__form');
 
-// Элементы попапа создания карточки
+// Попап аватара пользователя (кнопка открытия и форма ввода)
+const avatarEditBtn = document.querySelector('.profile__avatar-overlay');
+const avatarFormElement = document
+  .querySelector('.popup_type_avatar')
+  .querySelector('.popup__form');
+
+// Попап карточки (кнопка открытия и форма ввода)
 const cardPopupOpenBtn = document.querySelector('.profile__add-button');
 const cardFormElement = document.querySelector('.popup_type_card').querySelector('.popup__form');
 
-// ----------ДЕЙСТВИЯ----------
+// ================================== ОСНОВНОЙ АЛГОРИТМ ========================================
 
-function createCard(data) {
-  const card = new Card(
-    {
-      data,
-      handleCardClick: (photoCaption, photoLink, photoDescription) => {
-        popupWithImage.open(photoCaption, photoLink, photoDescription);
+// ---------- Экземпляр класса Api для взаимодействия с сервером -----------
+export const api = new Api(apiconfig);
+
+// ============== ЗАГРУЗКА ДАННЫХ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ, СОЗДАНИЕ ЭКЗЕМПЛЯРА, ==================
+// ================== ОТОБРАЖЕНИЕ НА СТРАНИЦЕ + ПОПАПЫ ПРОФИЛЯ и АВАТАРА =======================
+api
+  .getUserInfo()
+  .then(userData => {
+    const userInfo = new UserInfo({
+      userNameSelector,
+      userDescriptionSelector,
+      userAvatarImageSelector: userAvatarImageSelector,
+      userData,
+    });
+    userInfo.updateUserData(userData);
+    userInfo.setProfileFields();
+    userInfo.setAvatar();
+
+    // ----------- Экземпляр попапа профиля -----------------
+    const popupWithProfileForm = new PopupWithForm({
+      popupSelector: profilePopupSelector,
+      // передаем обработчик события отправки формы
+      formSubmitHandler: inputValues => {
+        popupWithProfileForm.changeBtnText('Сохранение...');
+        api
+          .editUser(inputValues)
+          .then(newUserData => {
+            userInfo.updateUserData(newUserData);
+            userInfo.setProfileFields();
+            popupWithProfileForm.close();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            popupWithProfileForm.changeBtnText('Сохранить');
+          });
       },
-    },
-    cardTemplateSelector
-  );
-  const cardElement = card.generateCard();
-  return cardElement;
-}
+    });
+    // ------------- Открытие попапа профиля ----------------
+    profileOpenBtn.addEventListener('click', () => {
+      profileFormValidator.resetValidation();
+      popupWithProfileForm.setInputValues(userInfo.getProfileFields()); // передаем поля профиля в инпуты формы
+      popupWithProfileForm.open();
+    });
+    // ----------- Экземпляр попапа аватара -----------------
+    const popupWithAvatarForm = new PopupWithForm({
+      popupSelector: avatarPopupSelector,
+      // передаем обработчик события отправки формы
+      formSubmitHandler: inputValues => {
+        popupWithAvatarForm.changeBtnText('Сохранение...');
+        api
+          .updateAvatar(inputValues)
+          .then(newUserData => {
+            userInfo.updateUserData(newUserData);
+            userInfo.setAvatar();
+            popupWithAvatarForm.close();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            popupWithAvatarForm.changeBtnText('Сохранить');
+          });
+      },
+    });
+    // ------------- Открытие попапа аватара ----------------
+    avatarEditBtn.addEventListener('click', () => {
+      avatarFormValidator.resetValidation();
+      popupWithAvatarForm.open();
+    });
+    return userInfo;
+  })
+  // ========================= ПЕРВИЧНАЯ ЗАГРУЗКА ДАННЫХ КАРТОЧЕК, ===============================
+  // ======================== ОТРИСОВКА + ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ ==============================
+  .then(userInfo => {
+    api
+      .getInitialCards()
+      .then(initialCards => {
+        // сортируем полученный массив, ставя вперед карточки текущего пользователя
+        initialCards.sort((a, b) => {
+          let x, y;
+          if (a.owner._id === userInfo._id) {
+            x = 0;
+          } else x = 1;
+          if (b.owner._id === userInfo._id) {
+            y = 0;
+          } else y = 1;
+          return x - y;
+        });
+        // обрезаем массив, оставляя первые 6 карточек
+        initialCards = initialCards.slice(0, 50);
 
-// Создаем экземпляр класса отрисовщика для первоначального заполнения галереи карточками
-const cardSection = new Section(
-  { 
-    initialCards,
-    // передаем метод отрисовки отдельной карточки
-    renderer: data => { 
-      const cardElement = createCard(data);
-      cardSection.addItem(cardElement);
-     },
-  },
+        // -------------Функция создания экземпляра карточки------------------
+        function createCardExemp(cardData, userId) {
+          const card = new Card(
+            {
+              data: { cardData, userId },
+              // обработчик клика карточки (открытие фото)
+              handleCardClick: (photoCaption, photoLink, photoDescription) => {
+                popupWithImage.open(photoCaption, photoLink, photoDescription);
+              },
+              // обработчик клика лайка
+              handleLikeClick: card => {
+                if (!card.isLiked) {
+                  api
+                    .setLike(card._id)
+                    .then(updatedCardData => {
+                      card.handleServerResForLike(updatedCardData);
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                } else {
+                  api
+                    .deleteLike(card._id)
+                    .then(updatedCardData => {
+                      card.handleServerResForLike(updatedCardData);
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                }
+              },
+              // обработчик клика удаления карточки
+              handleDelClick: card => {
+                // забираем в класс попапа подтверждения обработчик подтверждения
+                // и аргумент для него (card._id)
+                popupWithCardDelConfirm.getConfirmHandler({
+                  // обработчик подтверждения удаления
+                  confirmHandler: cardId => {
+                    popupWithCardDelConfirm.changeBtnText('Удаление...');
+                    api
+                      .deleteCard(cardId)
+                      .then(() => {
+                        popupWithCardDelConfirm.close();
+                        card.deleteCardElement();
+                      })
+                      .catch(err => {
+                        console.log(err);
+                      })
+                      .finally(() => {
+                        popupWithCardDelConfirm.changeBtnText('Да');
+                      });
+                  },
+                  confirmHandlerArgument: card._id,
+                });
+                popupWithCardDelConfirm.open();
+              },
+            },
+            cardTemplateSelector
+          );
+          return card;
+        }
+        // -------------- Экземпляр отрисовщика -----------------------
+        const cardSection = new Section(
+          {
+            initialCards,
+            renderer: cardData => {
+              // метод отрисовки отдельной карточки
+              const card = createCardExemp(cardData, userInfo._id);
+              const cardElement = card.generateCard();
+              return cardElement;
+            },
+          },
+          cardsContainerSelector
+        );
+        // рендерим карточки
+        cardSection.renderItems();
 
-  cardsContainerSelector
-);
+        // ---------- Экземпляр попапа добавления карточки -----------
+        const popupWithCardForm = new PopupWithForm({
+          popupSelector: cardPopupSelector,
+          // обработчик события отправки формы
+          formSubmitHandler: inputValues => {
+            popupWithCardForm.changeBtnText('Сохранение...');
+            api
+              .postCard(inputValues)
+              .then(сardData => {
+                cardSection.items = [сardData];
+                cardSection.renderItems(); // рендерим карточки
+                popupWithCardForm.close();
+              })
+              .catch(err => {
+                console.log(err);
+              })
+              .finally(() => {
+                popupWithCardForm.changeBtnText('Сохранить');
+              });
+          },
+        });
+        // --------- Открытие попапа добавления карточки ------------
+        cardPopupOpenBtn.addEventListener('click', () => {
+          cardFormValidator.resetValidation();
+          popupWithCardForm.open();
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-// Заполняем галерею карточками при загрузке страницы
-cardSection.renderItems();
+// =============================== ПРОЧИЕ ПОПАПЫ + ВАЛИДАЦИЯ ===================================
 
-// Создаем экземпляр класса для попапа создания карточки
-const popupWithCardForm = new PopupWithForm({
-  popupSelector: cardPopupSelector,
-  // передаем обработчик события отправки формы создания карточки
-  formSubmitHandler: inputValues => {
-    cardSection.addItem(createCard(inputValues));
-    popupWithCardForm.close();
-  },
-});
-
-// Создаем экземпляр класса для попапа профиля пользователя
-const popupWithProfileForm = new PopupWithForm({
-  popupSelector: profilePopupSelector,
-  formSubmitHandler: inputValues => {
-    userInfo.setUserInfo(inputValues);
-    popupWithProfileForm.close();
-  },
-});
-
-// Создаем экземпляр класса для попапа просмотра фотографии
+// --------- Экземпляр попапа просмотра фотографии --------------
 const popupWithImage = new PopupWithImage(pfotoPopupSelector);
-popupWithImage.setEventListeners();
 
-// Создаём экземпляр класса с данными о пользователе
-const userInfo = new UserInfo(userNameElementSelector, userDescriptionSelector);
+// --------- Экземпляр попапа потверждения удаления -------------
+const popupWithCardDelConfirm = new PopupWithConfirmation(confirmPopupSelector);
 
-// Для каждой формы ввода создаем свой экземпляр класса валидаторов и запускаем валидацию
+// -------------- Экземпляры класса валидаторов -----------------
 const profileFormValidator = new FormValidator(validationConfig, profileFormElement);
-profileFormValidator.enableValidation();
 const cardFormValidator = new FormValidator(validationConfig, cardFormElement);
+const avatarFormValidator = new FormValidator(validationConfig, avatarFormElement);
+// запускаем валидацию
+profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
-
-// Отслеживаем открытие попапа редактирования профиля
-profileOpenBtn.addEventListener('click', () => {
-  profileFormValidator.resetValidation();
-  popupWithProfileForm.setInputValues(userInfo.getUserInfo()); // передаем поля профиля в инпуты формы
-  popupWithProfileForm.open();
-  popupWithProfileForm.setEventListeners();///
-});
-
-// Отслеживаем открытие попапа добавления новой карточки
-cardPopupOpenBtn.addEventListener('click', () => {
-  cardFormValidator.resetValidation();
-  popupWithCardForm.open();
-  popupWithCardForm.setEventListeners();///
-});
+avatarFormValidator.enableValidation();
